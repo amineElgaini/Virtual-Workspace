@@ -1,13 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./output.css" rel="stylesheet">
-</head>
-<body>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./output.css" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="flex">
+      <div class="workers w-1/5">hi</div>
+      <style>
+        .work-spaces {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+          grid-template-rows: 1fr 1fr 1fr;
+        }
+        .work-spaces > div {
+            background-color: rgba(0, 0, 255, 0.152);
+        }
+        .conference {
+          grid-area: 1 / 1 / 2 / 3;
+        }
+        .reception {
+          grid-area: 1 / 4 / 2 / 5;
+        }
+        .server {
+          grid-area: 1 / 5 / 2 / 6;
+        }
+        .security {
+          grid-area: 2 / 1 / 4 / 3;
+        }
+        .staff {
+          grid-area: 3 / 4 / 4 / 5;
+        }
+        .archives {
+          grid-area:  3 / 5 / 4 / 6;
+        }
+      </style>
+      <div
+        class="work-spaces w-4/5 aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
+      >
+        <div class="conference">c</div>
+        <div class="reception">r</div>
+        <div class="server">ser</div>
+        <div class="staff">st</div>
+        <div class="security">sec</div>
+        <div class="archives">ar</div>
+      </div>
+    </main>
+  </body>
 </html>
