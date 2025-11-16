@@ -1,0 +1,43 @@
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+.work-spaces {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+.work-spaces > div {
+  background-color: rgba(0, 0, 255, 0.152);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.conference {
+  grid-area: 1 / 1 / 2 / 3;
+}
+.reception {
+  grid-area: 1 / 4 / 2 / 5;
+}
+.server {
+  grid-area: 1 / 5 / 2 / 6;
+}
+.security {
+  grid-area: 2 / 1 / 4 / 3;
+}
+.staff {
+  grid-area: 3 / 4 / 4 / 5;
+}
+.archives {
+  grid-area: 3 / 5 / 4 / 6;
+}
