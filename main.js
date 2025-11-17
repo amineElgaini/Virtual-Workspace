@@ -81,12 +81,11 @@ function firstPrint() {
 }
 
 function addUnsignedEmployee(employee, index) {
-  data.push(employee);
-
+    
   const card = document.createElement("div");
   card.dataset.index = index;
   card.className =
-    "flex w-fit cursor-pointer items-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-shadow duration-300 gap-2";
+    "unsignedEmployee flex w-fit cursor-pointer items-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-shadow duration-300 gap-2";
 
   card.innerHTML = `
     <img
@@ -112,12 +111,13 @@ function openChoosePopup(room) {
     chooseList.innerHTML = `<p class="text-gray-500 text-sm">No eligible employees.</p>`;
   } else {
     eligible.forEach((emp, index) => {
-      const card = document.createElement("div");
+      if (emp.room === null) {
+        const card = document.createElement("div");
 
-      card.className =
-        "flex cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
+        card.className =
+          "flex cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
 
-      card.innerHTML = `
+        card.innerHTML = `
         <img
           class="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
           src="${emp.photo}"
@@ -128,12 +128,13 @@ function openChoosePopup(room) {
         </div>
       `;
 
-      card.addEventListener("click", () => {
-        assignEmployeeToRoom(emp, index, room);
-        choosePopup.classList.add("hidden");
-      });
+        card.addEventListener("click", () => {
+          assignEmployeeToRoom(emp, index, room);
+          choosePopup.classList.add("hidden");
+        });
 
-      chooseList.appendChild(card);
+        chooseList.appendChild(card);
+      }
     });
   }
 
@@ -145,35 +146,54 @@ function canEnterRoom(role, room) {
 }
 
 function assignEmployeeToRoom(employee, employeeIndex, room) {
-  const roomDiv = document.querySelector(`[data-room="${room}"]`);
-  const div = document.createElement("div");
-  div.className = "p-2 flex items-center bg-white rounded-lg shadow gap-2";
-  data = data.map((emp, index) => {
-    if (index === employeeIndex) {
-      emp.room = room;
-    }
-    return emp;
-  });
+    
+    const roomDiv = document.querySelector(`[data-room="${room}"]`);
+    const div = document.createElement("div");
+    div.dataset.index = employeeIndex;
+
+  div.className =
+    "employee p-1 flex items-center bg-white rounded-lg shadow gap-1";
+
+        data = data.map((emp, index) => {
+          if (index === employeeIndex) {
+            emp.room = room;
+          }
+          return emp;
+        });
+
+
   div.innerHTML = `
-      <img class="w-10 h-10 rounded-full" src="${employee.photo}" />
+      <img class="w-8 h-8 rounded-full" src="${employee.photo}" />
       <div>
         <h2 class="text-xs font-semibold">${employee.name}</h2>
         <p class="text-xs text-gray-500">${employee.role}</p>
       </div>
-      <button
-        class="removeEmployee px-2 py-1 bg-red-500 text-white rounded text-xs ml-auto"
+      <button data-index="${employeeIndex}"
+        class="removeEmployee px-1 py-1 bg-red-500 text-white rounded text-xs ml-auto"
       >
         X
       </button>
   `;
+    console.log(roomDiv, div);
   roomDiv.append(div);
 
-  // remove employee from unsigned list if it exists
-  document.querySelector(`[data-index="${employeeIndex}"]`)?.remove();
+  document
+    .querySelector(`.removeEmployee[data-index="${employeeIndex}"]`)
+    .addEventListener("click", () => {
+      data = data.map((emp, index) => {
+        if (index === employeeIndex) {
+          emp.room = null;
+        }
+        return emp;
+      });
+      document
+        .querySelector(`.employee[data-index="${employeeIndex}"]`)
+        ?.remove();
+      addUnsignedEmployee(employee, employeeIndex);
+    });
 
-  // remove employee from unsigned list
-  //   const index = data.indexOf(employee);
-  //   if (index !== -1) data.splice(index, 1);
+  // remove employee from unsigned list if it exists
+  document.querySelector(`.unsignedEmployee[data-index="${employeeIndex}"]`)?.remove();
 }
 
 function canEnterRoom(role, room) {
@@ -230,6 +250,7 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
+  data.push(employee);
   addUnsignedEmployee(employee, data.length);
 
   overlay.classList.add("hidden");
