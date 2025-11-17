@@ -6,6 +6,7 @@
     <link href="./output.css" rel="stylesheet" />
     <link href="./style.css" rel="stylesheet" />
   </head>
+  <style></style>
   <body>
     <!-- toast -->
     <div
@@ -13,9 +14,9 @@
       class="fixed top-4 right-4 flex flex-col gap-2 z-50"
     ></div>
 
-    <main class="flex flex-col-reverse md:flex-row items-start">
+    <main class="flex flex-col-reverse sm:flex-row items-start">
       <!-- unsigned employees -->
-      <div class="p-2 employees w-2/5">
+      <div class="p-2 employees w-1/5">
         <button
           id="createEmployeeButton"
           class="bg-blue-600 p-1 text-white rounded"
@@ -27,7 +28,7 @@
 
       <!-- workspaces -->
       <div
-        class="work-spaces w-full md:w-3/5 aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
+        class="work-spaces w-full md:w-4/5 aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
       >
         <div data-room="conference" class="room conference flex flex-col">
           <button
@@ -142,6 +143,72 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- employee detial popup -->
+    <!-- employee detail popup -->
+    <div
+      id="detailsPopup"
+      class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-white p-6 rounded-lg w-[420px] max-h-[80vh] shadow-lg flex flex-col"
+      >
+        <!-- Header -->
+        <div class="flex items-center gap-3 mb-4">
+          <div
+            id="employeePhoto"
+            class="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-xl"
+          >
+            <!-- optional image -->
+          </div>
+          <div>
+            <h2 id="employeeName" class="text-xl font-bold">Employee Name</h2>
+            <p id="employeeRole" class="text-gray-600 text-sm">Employee Role</p>
+          </div>
+        </div>
+
+        <!-- Details section -->
+        <div
+          id="employeeDetails"
+          class="flex flex-col gap-3 border-t pt-3 overflow-y-auto pr-2"
+        >
+          <div class="flex justify-between">
+            <span class="font-semibold">Phone:</span>
+            <span id="employeePhone" class="text-gray-700">---</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-semibold">Email:</span>
+            <span id="employeeEmail" class="text-gray-700">---</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-semibold">Department:</span>
+            <span id="employeeDepartment" class="text-gray-700">---</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-semibold">Joined:</span>
+            <span id="employeeJoined" class="text-gray-700">---</span>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="font-semibold">Notes:</span>
+            <p id="employeeNotes" class="text-gray-700 text-sm mt-1">
+              No notes available.
+            </p>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <button
+          id="closeDetailsPopup"
+          class="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+        >
+          Close
+        </button>
       </div>
     </div>
 

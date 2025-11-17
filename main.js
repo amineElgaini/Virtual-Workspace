@@ -68,6 +68,14 @@ const addToRoomsButtons = document.querySelectorAll(".addToRoom");
 const choosePopup = document.getElementById("chooseEmployeePopup");
 const chooseList = document.getElementById("chooseEmployeeList");
 const closeChoosePopup = document.getElementById("closeChoosePopup");
+
+const closeDetailsPopup = document.getElementById("closeDetailsPopup");
+const detailsPopup = document.getElementById("detailsPopup");
+
+closeDetailsPopup.addEventListener("click", () => {
+  detailsPopup.classList.add("hidden");
+});
+
 firstPrint();
 
 function firstPrint() {
@@ -81,7 +89,6 @@ function firstPrint() {
 }
 
 function addUnsignedEmployee(employee, index) {
-    
   const card = document.createElement("div");
   card.dataset.index = index;
   card.className =
@@ -98,8 +105,14 @@ function addUnsignedEmployee(employee, index) {
       <p class="text-xs text-gray-500">${employee.role}</p>
     </div>
   `;
-
   unsignedEmployees.appendChild(card);
+
+  document
+    .querySelector(`.unsignedEmployee[data-index="${index}"]`)
+    .addEventListener("click", () => {
+      detailsPopup.classList.remove("hidden");
+    });
+
 }
 
 function openChoosePopup(room) {
@@ -146,21 +159,19 @@ function canEnterRoom(role, room) {
 }
 
 function assignEmployeeToRoom(employee, employeeIndex, room) {
-    
-    const roomDiv = document.querySelector(`[data-room="${room}"]`);
-    const div = document.createElement("div");
-    div.dataset.index = employeeIndex;
+  const roomDiv = document.querySelector(`[data-room="${room}"]`);
+  const div = document.createElement("div");
+  div.dataset.index = employeeIndex;
 
   div.className =
     "employee p-1 flex items-center bg-white rounded-lg shadow gap-1";
 
-        data = data.map((emp, index) => {
-          if (index === employeeIndex) {
-            emp.room = room;
-          }
-          return emp;
-        });
-
+  data = data.map((emp, index) => {
+    if (index === employeeIndex) {
+      emp.room = room;
+    }
+    return emp;
+  });
 
   div.innerHTML = `
       <img class="w-8 h-8 rounded-full" src="${employee.photo}" />
@@ -174,7 +185,7 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
         X
       </button>
   `;
-    console.log(roomDiv, div);
+  console.log(roomDiv, div);
   roomDiv.append(div);
 
   document
@@ -193,7 +204,9 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
     });
 
   // remove employee from unsigned list if it exists
-  document.querySelector(`.unsignedEmployee[data-index="${employeeIndex}"]`)?.remove();
+  document
+    .querySelector(`.unsignedEmployee[data-index="${employeeIndex}"]`)
+    ?.remove();
 }
 
 function canEnterRoom(role, room) {
