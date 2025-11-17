@@ -26,7 +26,7 @@ const roomWithEachEmployees = {
   archives: ["other", "manager"],
 };
 
-const data = [];
+let data = [];
 
 const createEmployeeButton = document.getElementById("createEmployeeButton");
 const unsignedEmployees = document.getElementById("unsignedEmployees");
@@ -35,11 +35,10 @@ const overlay = document.getElementById("modalOverlay");
 const form = document.getElementById("employeeForm");
 const toastContainer = document.getElementById("toastContainer");
 
-const addToRoomsButtons = document.querySelectorAll(".addToRoom")
+const addToRoomsButtons = document.querySelectorAll(".addToRoom");
 const choosePopup = document.getElementById("chooseEmployeePopup");
 const chooseList = document.getElementById("chooseEmployeeList");
 const closeChoosePopup = document.getElementById("closeChoosePopup");
-
 
 createEmployeeButton.addEventListener("click", () => {
   overlay.classList.remove("hidden");
@@ -63,9 +62,8 @@ form.addEventListener("submit", (e) => {
     email: form.email.value,
     phone: form.phone.value,
     workExperience: form.workExperience.value,
+    room: null,
   };
-
-  console.log(form.role.value)
 
   if (employee.name.length < 3) {
     showToast("Name must be at least 3 characters long!", "error");
@@ -88,6 +86,7 @@ function addUnsignedEmployee(employee) {
   data.push(employee);
 
   const card = document.createElement("div");
+  card.dataset.index = data.length - 1;
   card.className =
     "flex w-fit cursor-pointer items-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-shadow duration-300 gap-2";
 
@@ -106,14 +105,9 @@ function addUnsignedEmployee(employee) {
   unsignedEmployees.appendChild(card);
 }
 
-
-
-
-
 let selectedRoom = null;
 
-// open popup when clicking "+ room"
-addToRoomsButtons.forEach(btn => {
+addToRoomsButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     selectedRoom = btn.parentElement.dataset.room;
     openChoosePopup(selectedRoom);
@@ -123,12 +117,12 @@ addToRoomsButtons.forEach(btn => {
 function openChoosePopup(room) {
   chooseList.innerHTML = "";
 
-  const eligible = data.filter(emp => canEnterRoom(emp.role, room));
+  const eligible = data.filter((emp) => canEnterRoom(emp.role, room));
 
   if (eligible.length === 0) {
     chooseList.innerHTML = `<p class="text-gray-500 text-sm">No eligible employees.</p>`;
   } else {
-    eligible.forEach(emp => {
+    eligible.forEach((emp, index) => {
       const card = document.createElement("div");
 
       card.className =
@@ -146,7 +140,7 @@ function openChoosePopup(room) {
       `;
 
       card.addEventListener("click", () => {
-        assignEmployeeToRoom(emp, room);
+        assignEmployeeToRoom(emp, index, room);
         choosePopup.classList.add("hidden");
       });
 
@@ -161,12 +155,17 @@ function canEnterRoom(role, room) {
   return roomWithEachEmployees[role]?.includes(room);
 }
 
-
-function assignEmployeeToRoom(employee, room) {
+function assignEmployeeToRoom(employee, employeeIndex, room) {
   const roomDiv = document.querySelector(`[data-room="${room}"]`);
-
-  roomDiv.innerHTML = `
-    <div class="p-2 flex items-center bg-white rounded-lg shadow gap-2">
+  const div = document.createElement("div");
+  div.className = "p-2 flex items-center bg-white rounded-lg shadow gap-2";
+  data = data.map((emp, index) => {
+    if (index === employeeIndex) {
+      emp.room = room;
+    }
+    return emp;
+  });
+  div.innerHTML = `
       <img class="w-10 h-10 rounded-full" src="${employee.photo}" />
       <div>
         <h2 class="text-sm font-semibold">${employee.name}</h2>
@@ -177,12 +176,13 @@ function assignEmployeeToRoom(employee, room) {
       >
         X
       </button>
-    </div>
   `;
+  roomDiv.append(div);
+  document.querySelector(`[data-index="${employeeIndex}"]`).remove();
 
   // remove employee from unsigned list
-//   const index = data.indexOf(employee);
-//   if (index !== -1) data.splice(index, 1);
+  //   const index = data.indexOf(employee);
+  //   if (index !== -1) data.splice(index, 1);
 }
 
 function canEnterRoom(role, room) {
@@ -190,15 +190,20 @@ function canEnterRoom(role, room) {
     receptionist: ["reception"],
     ittechnician: ["server"],
     security: ["security"],
-    manager: ["conference", "reception", "server", "security", "staff", "archives"],
+    manager: [
+      "conference",
+      "reception",
+      "server",
+      "security",
+      "staff",
+      "archives",
+    ],
     nettoyage: ["conference", "reception", "server", "security", "staff"],
-    other: ["conference", "reception", "staff"]
+    other: ["conference", "reception", "staff"],
   };
 
   return restricted[role]?.includes(room);
 }
-
-
 
 closeChoosePopup.addEventListener("click", () => {
   choosePopup.classList.add("hidden");
