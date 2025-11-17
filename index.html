@@ -13,7 +13,7 @@
       class="fixed top-4 right-4 flex flex-col gap-2 z-50"
     ></div>
 
-    <main class="flex min-h-screen items-start">
+    <main class="flex flex-col-reverse md:flex-row items-start">
       <!-- unsigned employees -->
       <div class="p-2 employees w-2/5">
         <button
@@ -22,23 +22,55 @@
         >
           Add Employee
         </button>
-        <div id ="unsignedEmployees" class=" mt-2">
-
-          
-
-        </div>
+        <div id="unsignedEmployees" class="mt-2"></div>
       </div>
 
       <!-- workspaces -->
       <div
-        class="work-spaces w-3/5 aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
+        class="work-spaces w-full md:w-3/5 aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
       >
-        <div data-room="conference" class="room conference">c</div>
-        <div data-room="reception" class="room reception">r</div>
-        <div data-room="server" class="room server">ser</div>
-        <div data-room="staff" class="room staff">st</div>
-        <div data-room="security" class="room security">sec</div>
-        <div data-room="archives" class="room archives">ar</div>
+        <div data-room="conference" class="room conference">
+          <button
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+          >
+            + conference
+          </button>
+        </div>
+        <div data-room="reception" class="room reception">
+          <button
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+          >
+            + reception
+          </button>
+        </div>
+        <div data-room="server" class="room server">
+          <button
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+          >
+            + server
+          </button>
+        </div>
+        <div data-room="staff" class="room staff">
+          <button
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+          >
+            + staff
+          </button>
+        </div>
+        <div data-room="security" class="room security">
+          <button
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+          >
+            + security
+          </button>
+        </div>
+        <div data-room="archives" class="room archives">
+          <button
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+          >
+            + Archives
+          </button>
+        </div>
       </div>
     </main>
 
@@ -110,6 +142,30 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- choose employee popup -->
+    <div
+      id="chooseEmployeePopup"
+      class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-white p-5 rounded-lg w-[400px] max-h-[70vh] shadow-lg flex flex-col"
+      >
+        <h2 class="text-xl font-bold mb-3">Select Employee</h2>
+
+        <div
+          id="chooseEmployeeList"
+          class="flex flex-col gap-2 overflow-y-auto pr-2"
+        ></div>
+
+        <button
+          id="closeChoosePopup"
+          class="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+        >
+          Close
+        </button>
       </div>
     </div>
 

@@ -11,6 +11,7 @@ const rooms = [
 const employees = [
   "receptionist",
   "ittechnician",
+  "manager",
   "security",
   "nettoyage",
   "other",
@@ -18,8 +19,8 @@ const employees = [
 
 const roomWithEachEmployees = {
   conference: ["nettoyage", "other", "manager"],
-  reception: ["receptionists", "nettoyage", "manager"], //
-  server: ["ittechnicians", "nettoyage", "manager"], //
+  reception: ["receptionist", "nettoyage", "manager"], //
+  server: ["ittechnician", "nettoyage", "manager"], //
   security: ["security", "nettoyage"], //
   staff: ["staff", "nettoyage", "other", "manager"],
   archives: ["other", "manager"],
@@ -33,6 +34,12 @@ const closeBtn = document.getElementById("closeModal");
 const overlay = document.getElementById("modalOverlay");
 const form = document.getElementById("employeeForm");
 const toastContainer = document.getElementById("toastContainer");
+
+const addToRoomsButtons = document.querySelectorAll(".addToRoom")
+const choosePopup = document.getElementById("chooseEmployeePopup");
+const chooseList = document.getElementById("chooseEmployeeList");
+const closeChoosePopup = document.getElementById("closeChoosePopup");
+
 
 createEmployeeButton.addEventListener("click", () => {
   overlay.classList.remove("hidden");
@@ -99,13 +106,104 @@ function addUnsignedEmployee(employee) {
   unsignedEmployees.appendChild(card);
 }
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * Displays a toast message with a given message and type.
- * @param {string} message The message to be displayed.
- * @param {string} [type="success"] The type of the toast. Can be "success" or "error".
- */
-/*******  d2f9769b-d971-485c-8f62-9e729b9c7e96  *******/
+
+
+
+
+let selectedRoom = null;
+
+// open popup when clicking "+ room"
+addToRoomsButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    selectedRoom = btn.parentElement.dataset.room;
+    openChoosePopup(selectedRoom);
+  });
+});
+
+function openChoosePopup(room) {
+  chooseList.innerHTML = "";
+
+  const eligible = data.filter(emp => canEnterRoom(emp.role, room));
+
+  if (eligible.length === 0) {
+    chooseList.innerHTML = `<p class="text-gray-500 text-sm">No eligible employees.</p>`;
+  } else {
+    eligible.forEach(emp => {
+      const card = document.createElement("div");
+
+      card.className =
+        "flex cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
+
+      card.innerHTML = `
+        <img
+          class="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+          src="${emp.photo}"
+        />
+        <div>
+          <h2 class="text-sm font-semibold text-gray-800">${emp.name}</h2>
+          <p class="text-xs text-gray-500">${emp.role}</p>
+        </div>
+      `;
+
+      card.addEventListener("click", () => {
+        assignEmployeeToRoom(emp, room);
+        choosePopup.classList.add("hidden");
+      });
+
+      chooseList.appendChild(card);
+    });
+  }
+
+  choosePopup.classList.remove("hidden");
+}
+
+function canEnterRoom(role, room) {
+  return roomWithEachEmployees[role]?.includes(room);
+}
+
+
+function assignEmployeeToRoom(employee, room) {
+  const roomDiv = document.querySelector(`[data-room="${room}"]`);
+
+  roomDiv.innerHTML = `
+    <div class="p-2 flex items-center bg-white rounded-lg shadow gap-2">
+      <img class="w-10 h-10 rounded-full" src="${employee.photo}" />
+      <div>
+        <h2 class="text-sm font-semibold">${employee.name}</h2>
+        <p class="text-xs text-gray-500">${employee.role}</p>
+      </div>
+      <button
+        class="removeEmployee px-2 py-1 bg-red-500 text-white rounded text-xs ml-auto"
+      >
+        X
+      </button>
+    </div>
+  `;
+
+  // remove employee from unsigned list
+//   const index = data.indexOf(employee);
+//   if (index !== -1) data.splice(index, 1);
+}
+
+function canEnterRoom(role, room) {
+  const restricted = {
+    receptionist: ["reception"],
+    ittechnician: ["server"],
+    security: ["security"],
+    manager: ["conference", "reception", "server", "security", "staff", "archives"],
+    nettoyage: ["conference", "reception", "server", "security", "staff"],
+    other: ["conference", "reception", "staff"]
+  };
+
+  return restricted[role]?.includes(room);
+}
+
+
+
+closeChoosePopup.addEventListener("click", () => {
+  choosePopup.classList.add("hidden");
+});
+
 function showToast(message, type = "success") {
   const toast = document.createElement("div");
   toast.className = `
