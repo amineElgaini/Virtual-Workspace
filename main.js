@@ -26,7 +26,36 @@ const roomWithEachEmployees = {
   archives: ["other", "manager"],
 };
 
-let data = [];
+let data = [
+  {
+    name: "Amine L.",
+    role: "security",
+    photo: "https://randomuser.me/api/portraits/men/32.jpg",
+    email: "amine.security@example.com",
+    phone: "0612345678",
+    workExperience: "2 years",
+    room: null,
+  },
+  {
+    name: "Sara B.",
+    role: "receptionist",
+    photo: "https://randomuser.me/api/portraits/women/44.jpg",
+    email: "sara.reception@example.com",
+    phone: "0623456789",
+    workExperience: "1 year",
+    room: "reception",
+  },
+  {
+    name: "Youssef K.",
+    role: "ittechnician",
+    photo: "https://randomuser.me/api/portraits/men/55.jpg",
+    email: "youssef.it@example.com",
+    phone: "0634567890",
+    workExperience: "3 years",
+    room: "server",
+  },
+];
+let selectedRoom = null;
 
 const createEmployeeButton = document.getElementById("createEmployeeButton");
 const unsignedEmployees = document.getElementById("unsignedEmployees");
@@ -39,54 +68,23 @@ const addToRoomsButtons = document.querySelectorAll(".addToRoom");
 const choosePopup = document.getElementById("chooseEmployeePopup");
 const chooseList = document.getElementById("chooseEmployeeList");
 const closeChoosePopup = document.getElementById("closeChoosePopup");
+firstPrint();
 
-createEmployeeButton.addEventListener("click", () => {
-  overlay.classList.remove("hidden");
-});
+function firstPrint() {
+  data.forEach((emp, index) => {
+    if (emp.room === null) {
+      addUnsignedEmployee(emp, index);
+    } else {
+      assignEmployeeToRoom(emp, index, emp.room);
+    }
+  });
+}
 
-closeBtn.addEventListener("click", () => {
-  overlay.classList.add("hidden");
-});
-
-overlay.addEventListener("click", (e) => {
-  if (e.target === overlay) overlay.classList.add("hidden");
-});
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const employee = {
-    name: form.name.value,
-    role: form.role.value,
-    photo: form.photo.value,
-    email: form.email.value,
-    phone: form.phone.value,
-    workExperience: form.workExperience.value,
-    room: null,
-  };
-
-  if (employee.name.length < 3) {
-    showToast("Name must be at least 3 characters long!", "error");
-    return;
-  }
-
-  if (!employees.includes(employee.role)) {
-    showToast("Please select a valid role!", "error");
-    return;
-  }
-
-  addUnsignedEmployee(employee);
-
-  overlay.classList.add("hidden");
-  form.reset();
-  showToast("Employee added successfully!", "success");
-});
-
-function addUnsignedEmployee(employee) {
+function addUnsignedEmployee(employee, index) {
   data.push(employee);
 
   const card = document.createElement("div");
-  card.dataset.index = data.length - 1;
+  card.dataset.index = index;
   card.className =
     "flex w-fit cursor-pointer items-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-shadow duration-300 gap-2";
 
@@ -97,22 +95,13 @@ function addUnsignedEmployee(employee) {
       alt="Employee Photo"
     />
     <div class="flex flex-col">
-      <h2 class="text-sm font-semibold text-gray-800">${employee.name}</h2>
+      <h2 class="text-xs font-semibold text-gray-800">${employee.name}</h2>
       <p class="text-xs text-gray-500">${employee.role}</p>
     </div>
   `;
 
   unsignedEmployees.appendChild(card);
 }
-
-let selectedRoom = null;
-
-addToRoomsButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    selectedRoom = btn.parentElement.dataset.room;
-    openChoosePopup(selectedRoom);
-  });
-});
 
 function openChoosePopup(room) {
   chooseList.innerHTML = "";
@@ -134,7 +123,7 @@ function openChoosePopup(room) {
           src="${emp.photo}"
         />
         <div>
-          <h2 class="text-sm font-semibold text-gray-800">${emp.name}</h2>
+          <h2 class="text-xs font-semibold text-gray-800">${emp.name}</h2>
           <p class="text-xs text-gray-500">${emp.role}</p>
         </div>
       `;
@@ -168,7 +157,7 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
   div.innerHTML = `
       <img class="w-10 h-10 rounded-full" src="${employee.photo}" />
       <div>
-        <h2 class="text-sm font-semibold">${employee.name}</h2>
+        <h2 class="text-xs font-semibold">${employee.name}</h2>
         <p class="text-xs text-gray-500">${employee.role}</p>
       </div>
       <button
@@ -178,7 +167,9 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
       </button>
   `;
   roomDiv.append(div);
-  document.querySelector(`[data-index="${employeeIndex}"]`).remove();
+
+  // remove employee from unsigned list if it exists
+  document.querySelector(`[data-index="${employeeIndex}"]`)?.remove();
 
   // remove employee from unsigned list
   //   const index = data.indexOf(employee);
@@ -205,10 +196,60 @@ function canEnterRoom(role, room) {
   return restricted[role]?.includes(room);
 }
 
+addToRoomsButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    selectedRoom = btn.parentElement.dataset.room;
+    openChoosePopup(selectedRoom);
+  });
+});
+
+createEmployeeButton.addEventListener("click", () => {
+  overlay.classList.remove("hidden");
+});
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const employee = {
+    name: form.name.value,
+    role: form.role.value,
+    photo: form.photo.value,
+    email: form.email.value,
+    phone: form.phone.value,
+    workExperience: form.workExperience.value,
+    room: null,
+  };
+
+  if (employee.name.length < 3) {
+    showToast("Name must be at least 3 characters long!", "error");
+    return;
+  }
+
+  if (!employees.includes(employee.role)) {
+    showToast("Please select a valid role!", "error");
+    return;
+  }
+
+  addUnsignedEmployee(employee, data.length);
+
+  overlay.classList.add("hidden");
+  form.reset();
+  showToast("Employee added successfully!", "success");
+});
+
+closeBtn.addEventListener("click", () => {
+  overlay.classList.add("hidden");
+});
+
+overlay.addEventListener("click", (e) => {
+  if (e.target === overlay) overlay.classList.add("hidden");
+});
+
 closeChoosePopup.addEventListener("click", () => {
   choosePopup.classList.add("hidden");
 });
 
+// Toast
 function showToast(message, type = "success") {
   const toast = document.createElement("div");
   toast.className = `
@@ -219,7 +260,6 @@ function showToast(message, type = "success") {
   toast.textContent = message;
   toastContainer.appendChild(toast);
 
-  // Remove toast after 3 seconds
   setTimeout(() => {
     toast.classList.add("opacity-0");
     setTimeout(() => toast.remove(), 500);
