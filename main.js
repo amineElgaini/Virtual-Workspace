@@ -33,7 +33,20 @@ let data = [
     photo: "https://randomuser.me/api/portraits/men/32.jpg",
     email: "amine.security@example.com",
     phone: "0612345678",
-    workExperience: "2 years",
+    workExperience: [
+      {
+        dateStart: "2022-01-01",
+        dateEnd: "2022-12-31",
+        jobTitle: "IT Technician",
+        company: "Company A",
+      },
+      {
+        dateStart: "2022-01-01",
+        dateEnd: "2022-12-31",
+        jobTitle: "IT Technician",
+        company: "Company A",
+      },
+    ],
     room: null,
   },
   {
@@ -42,7 +55,20 @@ let data = [
     photo: "https://randomuser.me/api/portraits/women/44.jpg",
     email: "sara.reception@example.com",
     phone: "0623456789",
-    workExperience: "1 year",
+    workExperience: [
+      {
+        dateStart: "2022-01-01",
+        dateEnd: "2022-12-31",
+        jobTitle: "IT Technician",
+        company: "Company A",
+      },
+      {
+        dateStart: "2022-01-01",
+        dateEnd: "2022-12-31",
+        jobTitle: "IT Technician",
+        company: "Company A",
+      },
+    ],
     room: "reception",
   },
   {
@@ -51,8 +77,21 @@ let data = [
     photo: "https://randomuser.me/api/portraits/men/55.jpg",
     email: "youssef.it@example.com",
     phone: "0634567890",
-    workExperience: "3 years",
     room: "server",
+    workExperience: [
+      {
+        dateStart: "2022-01-01",
+        dateEnd: "2022-12-31",
+        jobTitle: "IT Technician",
+        company: "Company A",
+      },
+      {
+        dateStart: "2022-01-01",
+        dateEnd: "2022-12-31",
+        jobTitle: "IT Technician",
+        company: "Company A",
+      },
+    ],
   },
 ];
 let selectedRoom = null;
@@ -71,6 +110,70 @@ const closeChoosePopup = document.getElementById("closeChoosePopup");
 
 const closeDetailsPopup = document.getElementById("closeDetailsPopup");
 const detailsPopup = document.getElementById("detailsPopup");
+const experiences = document.getElementById("experiences");
+const addEperienceButton = document.getElementById("addEperienceButton");
+
+addEperienceButton.addEventListener("click", () => {
+  const div = document.createElement("div");
+  div.className =
+    "experience-item p-4 border rounded-lg mb-3 shadow-sm bg-white relative";
+  div.innerHTML = `
+              <div class="flex  gap-1">
+
+              <label class="block mb-2">
+                <span class="text-gray-700 font-medium">Job Title</span>
+                <input
+                  type="text"
+                  name="jobTitle"
+                  value="IT Technician"
+                  class="w-full mt-1 border p-1 rounded"
+                />
+              </label>
+
+              <label class="block mb-2">
+                <span class="text-gray-700 font-medium">Company</span>
+                <input
+                  type="text"
+                  name="company"
+                  value="Company A"
+                  class="w-full mt-1 border p-1 rounded"
+                />
+              </label>
+
+              </div>
+
+              <div class="flex  gap-1">
+                <label class="block flex-1">
+                  <span class="text-gray-700 font-medium">Date Start</span>
+                  <input
+                    type="date"
+                    name="dateStart"
+                    value="2022-01-01"
+                    class="w-full mt-1 border p-1 rounded"
+                  />
+                </label>
+
+                <label class="block flex-1">
+                  <span class="text-gray-700 font-medium">Date End</span>
+                  <input
+                    type="date"
+                    name="dateEnd"
+                    value="2022-12-31"
+                    class="w-full mt-1 border p-1 rounded"
+                  />
+                </label>
+            </div>
+            <button
+    class="removeExperience absolute top-2 right-2 text-red-500 hover:text-red-700"
+  >
+    ✕
+  </button>
+  `;
+  experiences.append(div);
+  div.querySelector(".removeExperience").addEventListener("click", (e) => {
+    e.target.parentElement.remove();
+  });
+});
 
 closeDetailsPopup.addEventListener("click", () => {
   detailsPopup.classList.add("hidden");
@@ -110,9 +213,8 @@ function addUnsignedEmployee(employee, index) {
   document
     .querySelector(`.unsignedEmployee[data-index="${index}"]`)
     .addEventListener("click", () => {
-      detailsPopup.classList.remove("hidden");
+      showDetails(index);
     });
-
 }
 
 function openChoosePopup(room) {
@@ -185,7 +287,6 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
         X
       </button>
   `;
-  console.log(roomDiv, div);
   roomDiv.append(div);
 
   document
@@ -207,7 +308,101 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
   document
     .querySelector(`.unsignedEmployee[data-index="${employeeIndex}"]`)
     ?.remove();
+
+  document
+    .querySelector(`.employee[data-index="${employeeIndex}"]`)
+    .addEventListener("click", () => {
+      showDetails(employeeIndex);
+    });
 }
+
+function showDetails(index) {
+  // Find employee from data array
+  const emp = data[index]; // simpler than .find()
+
+  // Show popup
+  detailsPopup.classList.remove("hidden");
+
+  // Build experiences HTML dynamically
+  let experiencesHTML = "";
+  if (emp.workExperience && emp.workExperience.length > 0) {
+    emp.workExperience.forEach((exp) => {
+      experiencesHTML += `
+        <div class="experience-item-details p-4 border rounded-lg mb-3 shadow-sm bg-white">
+          <h3 class="text-lg font-semibold">${exp.jobTitle}</h3>
+          <p class="text-gray-700">
+            Company: <span class="font-medium">${exp.company}</span>
+          </p>
+          <div class="flex gap-2 mt-2 text-sm text-gray-600">
+            <span>From: <span class="font-medium">${exp.dateStart}</span></span>
+            <span>-</span>
+            <span>To: <span class="font-medium">${exp.dateEnd}</span></span>
+          </div>
+        </div>
+      `;
+    });
+  } else {
+    experiencesHTML = `<p class="text-gray-500 text-sm">No work experience available.</p>`;
+  }
+
+  // Populate popup content
+  document.querySelector(".info").innerHTML = `
+    <div class="info">
+
+      <!-- Header -->
+      <div class="flex items-center gap-3 mb-4">
+        <div
+          id="employeePhoto"
+          class="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-xl"
+        >
+          ${emp.photo ? `<img src="${emp.photo}" class="w-full h-full object-cover rounded-full"/>` : "?"}
+        </div>
+        <div>
+          <h2 id="employeeName" class="text-xl font-bold">${emp.name}</h2>
+          <p id="employeeRole" class="text-gray-600 text-sm">${emp.role}</p>
+        </div>
+      </div>
+
+      <!-- Details section -->
+      <div
+        id="employeeDetails"
+        class="flex flex-col gap-3 border-t pt-3 overflow-y-auto pr-2"
+      >
+        <div class="flex justify-between">
+          <span class="font-semibold">Phone:</span>
+          <span id="employeePhone" class="text-gray-700">${emp.phone || "---"}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="font-semibold">Email:</span>
+          <span id="employeeEmail" class="text-gray-700">${emp.email || "---"}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="font-semibold">Department:</span>
+          <span id="employeeDepartment" class="text-gray-700">${emp.room || "---"}</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span class="font-semibold">Joined:</span>
+          <span id="employeeJoined" class="text-gray-700">${emp.joined || "---"}</span>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="font-semibold">Notes:</span>
+          <p id="employeeNotes" class="text-gray-700 text-sm mt-1">
+            ${emp.notes || "No notes available."}
+          </p>
+        </div>
+
+        <div id="experiences">
+          ${experiencesHTML}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 
 function canEnterRoom(role, room) {
   const restricted = {
@@ -243,15 +438,27 @@ createEmployeeButton.addEventListener("click", () => {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
+  let epx = [];
+  document.querySelectorAll(".experience-item").forEach((e) => {
+    epx.push({
+      jobTitle: e.querySelector("input[name='jobTitle']").value,
+      company: e.querySelector("input[name='company']").value,
+      dateStart: e.querySelector("input[name='dateStart']").value,
+      dateEnd: e.querySelector("input[name='dateEnd']").value,
+    });
+  });
+
   const employee = {
     name: form.name.value,
     role: form.role.value,
     photo: form.photo.value,
     email: form.email.value,
     phone: form.phone.value,
-    workExperience: form.workExperience.value,
+    workExperience: epx,
     room: null,
   };
+
+  console.log(employee);
 
   if (employee.name.length < 3) {
     showToast("Name must be at least 3 characters long!", "error");

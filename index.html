@@ -75,140 +75,111 @@
       </div>
     </main>
 
-    <!-- add employee model -->
-    <div
-      id="modalOverlay"
-      class="hidden fixed inset-0 bg-black/50 flex items-center justify-center"
-    >
-      <div class="bg-white p-6 rounded-lg w-[350px] shadow-lg">
-        <h2 class="text-xl font-bold mb-4">Add Employee</h2>
-        <form id="employeeForm" class="flex flex-col gap-3">
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            class="border p-2 rounded"
-          />
+<!-- Add Employee Modal -->
+<div
+  id="modalOverlay"
+  class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+>
+  <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-lg flex flex-col max-h-[80vh] overflow-hidden">
+    <h2 class="text-xl font-bold mb-4">Add Employee</h2>
+    <form id="employeeForm" class="flex flex-col gap-3 overflow-y-auto flex-1 pr-2">
+      <!-- Name -->
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        class="border p-2 rounded"
+      />
 
-          <select name="role" class="border p-2 rounded">
-            <option value="" disabled selected>Select role</option>
-            <option value="receptionist">Receptionist</option>
-            <option value="ittechnician">IT Technician</option>
-            <option value="security">Security Agent</option>
-            <option value="manager">Manager</option>
-            <option value="nettoyage">Nettoyage</option>
-            <option value="other">Other</option>
-          </select>
+      <!-- Role -->
+      <select name="role" class="border p-2 rounded">
+        <option value="" disabled selected>Select role</option>
+        <option value="receptionist">Receptionist</option>
+        <option value="ittechnician">IT Technician</option>
+        <option value="security">Security Agent</option>
+        <option value="manager">Manager</option>
+        <option value="nettoyage">Nettoyage</option>
+        <option value="other">Other</option>
+      </select>
 
-          <input
-            type="url"
-            name="photo"
-            placeholder="Photo URL"
-            class="border p-2 rounded"
-          />
+      <!-- Photo URL -->
+      <input
+        type="url"
+        name="photo"
+        placeholder="Photo URL"
+        class="border p-2 rounded"
+      />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            class="border p-2 rounded"
-          />
+      <!-- Email -->
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        class="border p-2 rounded"
+      />
 
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Phone"
-            class="border p-2 rounded"
-          />
+      <!-- Phone -->
+      <input
+        type="tel"
+        name="phone"
+        placeholder="Phone"
+        class="border p-2 rounded"
+      />
 
-          <textarea
-            name="workExperience"
-            placeholder="Work Experience"
-            class="border p-2 rounded"
-          ></textarea>
+      <!-- Experiences container -->
+      <div id="experiences" class="flex flex-col gap-2"></div>
 
-          <div class="flex justify-between mt-3">
-            <button
-              type="submit"
-              class="px-4 py-2 bg-green-500 text-white rounded"
-            >
-              Save
-            </button>
-            <button
-              type="button"
-              id="closeModal"
-              class="px-4 py-2 bg-red-500 text-white rounded"
-            >
-              Close
-            </button>
-          </div>
-        </form>
+      <!-- Add Experience Button -->
+      <button
+        id="addEperienceButton"
+        type="button"
+        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+      >
+        Add Experience
+      </button>
+
+      <!-- Footer Buttons -->
+      <div class="flex justify-between mt-3">
+        <button
+          type="submit"
+          class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+        >
+          Save
+        </button>
+        <button
+          type="button"
+          id="closeModal"
+          class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+        >
+          Close
+        </button>
       </div>
-    </div>
+    </form>
+  </div>
+</div>
 
-    <!-- employee detial popup -->
-    <!-- employee detail popup -->
+    <!-- Employee Detail Popup -->
     <div
       id="detailsPopup"
       class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50"
     >
       <div
-        class="bg-white p-6 rounded-lg w-[420px] max-h-[80vh] shadow-lg flex flex-col"
+        class="bg-white p-6 rounded-lg w-full max-w-md max-h-[80vh] shadow-lg flex flex-col overflow-hidden"
       >
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-4">
-          <div
-            id="employeePhoto"
-            class="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-xl"
-          >
-            <!-- optional image -->
-          </div>
-          <div>
-            <h2 id="employeeName" class="text-xl font-bold">Employee Name</h2>
-            <p id="employeeRole" class="text-gray-600 text-sm">Employee Role</p>
-          </div>
-        </div>
-
-        <!-- Details section -->
-        <div
-          id="employeeDetails"
-          class="flex flex-col gap-3 border-t pt-3 overflow-y-auto pr-2"
-        >
-          <div class="flex justify-between">
-            <span class="font-semibold">Phone:</span>
-            <span id="employeePhone" class="text-gray-700">---</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span class="font-semibold">Email:</span>
-            <span id="employeeEmail" class="text-gray-700">---</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span class="font-semibold">Department:</span>
-            <span id="employeeDepartment" class="text-gray-700">---</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span class="font-semibold">Joined:</span>
-            <span id="employeeJoined" class="text-gray-700">---</span>
-          </div>
-
-          <div class="flex flex-col">
-            <span class="font-semibold">Notes:</span>
-            <p id="employeeNotes" class="text-gray-700 text-sm mt-1">
-              No notes available.
-            </p>
-          </div>
+        <!-- Info section (will be populated dynamically) -->
+        <div class="info overflow-y-auto flex-1 pr-2">
+          <!-- Dynamic content goes here -->
         </div>
 
         <!-- Footer -->
-        <button
-          id="closeDetailsPopup"
-          class="mt-4 px-4 py-2 bg-red-500 text-white rounded"
-        >
-          Close
-        </button>
+        <div class="mt-4 flex justify-end">
+          <button
+            id="closeDetailsPopup"
+            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
 
