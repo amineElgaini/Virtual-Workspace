@@ -14,9 +14,9 @@
       class="fixed top-4 right-4 flex flex-col gap-2 z-50"
     ></div>
 
-    <main class="flex flex-col-reverse sm:flex-row items-start">
+    <main class="flex flex-row items-start">
       <!-- unsigned employees -->
-      <div class="p-2 employees w-1/5">
+      <div class="p-2 employees w-[20vw]">
         <button
           id="createEmployeeButton"
           class="bg-blue-600 p-1 text-white rounded"
@@ -28,23 +28,23 @@
 
       <!-- workspaces -->
       <div
-        class="work-spaces w-full md:w-4/5 aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
+        class="work-spaces w-[80vw] aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
       >
-        <div data-room="conference" class="room conference flex flex-col">
+        <div data-room="conference" class="room conference flex flex-col w-[32vw">
           <button
-            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer "
           >
             + conference
           </button>
         </div>
-        <div data-room="reception" class="room reception flex flex-col">
+        <div data-room="reception" class="room reception flex flex-col w-[17vw]">
           <button
             class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
           >
             + reception
           </button>
         </div>
-        <div data-room="server" class="room server flex flex-col">
+        <div data-room="server" class="room server flex flex-col w-[17vw]">
           <button
             class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
           >
@@ -53,19 +53,19 @@
         </div>
         <div data-room="staff" class="room staff flex flex-col">
           <button
-            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer w-[17vw]"
           >
             + staff
           </button>
         </div>
-        <div data-room="security" class="room security flex flex-col">
+        <div data-room="security" class="room security flex flex-col w-[32vw]">
           <button
             class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
           >
             + security
           </button>
         </div>
-        <div data-room="archives" class="room archives flex flex-col">
+        <div data-room="archives" class="room archives flex flex-col w-[17vw]">
           <button
             class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
           >
@@ -199,6 +199,8 @@
         </button>
       </div>
     </div>
+
+    
 
     <script src="./main.js"></script>
   </body>

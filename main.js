@@ -2,6 +2,7 @@ let rooms = [];
 let employees = [];
 let roomWithEachEmployees = {};
 let data = [];
+let selectedRoom = null;
 
 fetch("data.json")
   .then((res) => res.json())
@@ -13,8 +14,6 @@ fetch("data.json")
     firstPrint();
   })
   .catch((err) => console.error(err));
-
-let selectedRoom = null;
 
 const createEmployeeButton = document.getElementById("createEmployeeButton");
 const unsignedEmployees = document.getElementById("unsignedEmployees");
@@ -33,6 +32,7 @@ const detailsPopup = document.getElementById("detailsPopup");
 const experiences = document.getElementById("experiences");
 const addEperienceButton = document.getElementById("addEperienceButton");
 
+// Add experiences in pop up
 addEperienceButton.addEventListener("click", () => {
   const div = document.createElement("div");
   div.className =
@@ -126,6 +126,7 @@ function firstPrint() {
 }
 
 function addUnsignedEmployee(employee, index) {
+  employee.room = null;
   const card = document.createElement("div");
   card.dataset.index = index;
   card.className =
@@ -154,17 +155,24 @@ function addUnsignedEmployee(employee, index) {
 function openChoosePopup(room) {
   chooseList.innerHTML = "";
 
-  const eligible = data.filter((emp) => canEnterRoom(emp.role, room));
+  const eligible = data.filter((emp) => {
+    if (emp.room === null) {
+      return canEnterRoom(emp.role, room);
+    }
+    return false;
+  });
 
   if (eligible.length === 0) {
     chooseList.innerHTML = `<p class="text-gray-500 text-sm">No eligible employees.</p>`;
   } else {
-    eligible.forEach((emp, index) => {
-      if (emp.room === null) {
+
+    data.forEach((emp, index) => {
+      if (canEnterRoom(emp.role, room) && emp.room === null) {
         const card = document.createElement("div");
+        card.dataset.index = index;
 
         card.className =
-          "flex cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
+          "cardChoose flex cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
 
         card.innerHTML = `
         <img
@@ -177,12 +185,16 @@ function openChoosePopup(room) {
         </div>
       `;
 
-        card.addEventListener("click", () => {
-          assignEmployeeToRoom(emp, index, room);
-          choosePopup.classList.add("hidden");
-        });
-
         chooseList.appendChild(card);
+
+        console.log(index)
+        document
+          .querySelector(`.cardChoose[data-index="${index}"]`)
+          .addEventListener("click", () => {
+            // console.log(emp, index, room);
+            assignEmployeeToRoom(emp, index, room);
+            choosePopup.classList.add("hidden");
+          });
       }
     });
   }
@@ -191,7 +203,7 @@ function openChoosePopup(room) {
 }
 
 function canEnterRoom(role, room) {
-  return roomWithEachEmployees[role]?.includes(room);
+  return roomWithEachEmployees[room]?.includes(role);
 }
 
 function assignEmployeeToRoom(employee, employeeIndex, room) {
@@ -201,13 +213,9 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
 
   div.className =
     "employee p-1 flex items-center bg-white rounded-lg shadow gap-1";
+  div.dataset.id = employeeIndex;
 
-  data = data.map((emp, index) => {
-    if (index === employeeIndex) {
-      emp.room = room;
-    }
-    return emp;
-  });
+  employee.room = room;
 
   div.innerHTML = `
       <img class="w-8 h-8 rounded-full" src="${employee.photo}" />
@@ -225,7 +233,9 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
 
   document
     .querySelector(`.removeEmployee[data-index="${employeeIndex}"]`)
-    .addEventListener("click", () => {
+    .addEventListener("click", (e) => {
+      e.stopPropagation();
+
       data = data.map((emp, index) => {
         if (index === employeeIndex) {
           emp.room = null;
@@ -239,13 +249,14 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
     });
 
   // remove employee from unsigned list if it exists
+  console.log(employeeIndex);
   document
     .querySelector(`.unsignedEmployee[data-index="${employeeIndex}"]`)
     ?.remove();
 
   document
     .querySelector(`.employee[data-index="${employeeIndex}"]`)
-    .addEventListener("click", () => {
+    .addEventListener("click", (e) => {
       showDetails(employeeIndex);
     });
 }
@@ -349,25 +360,25 @@ function showDetails(index) {
   `;
 }
 
-function canEnterRoom(role, room) {
-  const restricted = {
-    receptionist: ["reception"],
-    ittechnician: ["server"],
-    security: ["security"],
-    manager: [
-      "conference",
-      "reception",
-      "server",
-      "security",
-      "staff",
-      "archives",
-    ],
-    nettoyage: ["conference", "reception", "server", "security", "staff"],
-    other: ["conference", "reception", "staff"],
-  };
+// function canEnterRoom(role, room) {
+//   const restricted = {
+//     receptionist: ["reception"],
+//     ittechnician: ["server"],
+//     security: ["security"],
+//     manager: [
+//       "conference",
+//       "reception",
+//       "server",
+//       "security",
+//       "staff",
+//       "archives",
+//     ],
+//     nettoyage: ["conference", "reception", "server", "security", "staff"],
+//     other: ["conference", "reception", "staff"],
+//   };
 
-  return restricted[role]?.includes(room);
-}
+//   return restricted[role]?.includes(room);
+// }
 
 addToRoomsButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -402,8 +413,6 @@ form.addEventListener("submit", (e) => {
     workExperience: epx,
     room: null,
   };
-
-  console.log(employee);
 
   if (employee.name.length < 3) {
     showToast("Name must be at least 3 characters long!", "error");
