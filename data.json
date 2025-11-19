@@ -1,0 +1,94 @@
+{
+  "rooms": [
+    "conference",
+    "reception",
+    "server",
+    "security",
+    "staff",
+    "archives"
+  ],
+  "employees": [
+    "receptionist",
+    "ittechnician",
+    "manager",
+    "security",
+    "nettoyage",
+    "other"
+  ],
+  "roomWithEachEmployees": {
+    "conference": ["nettoyage", "other, manager"],
+    "reception": ["receptionist", "nettoyage", "manager"],
+    "server": ["ittechnician", "nettoyage", "manager"],
+    "security": ["security", "nettoyage"],
+    "staff": ["staff", "nettoyage", "other", "manager"],
+    "archives": ["other", "manager"]
+  },
+  "data": [
+    {
+      "name": "Amine L.",
+      "role": "security",
+      "photo": "https://randomuser.me/api/portraits/men/32.jpg",
+      "email": "amine.security@example.com",
+      "phone": "0612345678",
+      "workExperience": [
+        {
+          "dateStart": "2022-01-01",
+          "dateEnd": "2022-12-31",
+          "jobTitle": "IT Technician",
+          "company": "Company A"
+        },
+        {
+          "dateStart": "2022-01-01",
+          "dateEnd": "2022-12-31",
+          "jobTitle": "IT Technician",
+          "company": "Company A"
+        }
+      ],
+      "room": null
+    },
+    {
+      "name": "Sara B.",
+      "role": "receptionist",
+      "photo": "https://randomuser.me/api/portraits/women/44.jpg",
+      "email": "sara.reception@example.com",
+      "phone": "0623456789",
+      "workExperience": [
+        {
+          "dateStart": "2022-01-01",
+          "dateEnd": "2022-12-31",
+          "jobTitle": "IT Technician",
+          "company": "Company A"
+        },
+        {
+          "dateStart": "2022-01-01",
+          "dateEnd": "2022-12-31",
+          "jobTitle": "IT Technician",
+          "company": "Company A"
+        }
+      ],
+      "room": "reception"
+    },
+    {
+      "name": "Youssef K.",
+      "role": "ittechnician",
+      "photo": "https://randomuser.me/api/portraits/men/55.jpg",
+      "email": "youssef.it@example.com",
+      "phone": "0634567890",
+      "room": "server",
+      "workExperience": [
+        {
+          "dateStart": "2022-01-01",
+          "dateEnd": "2022-12-31",
+          "jobTitle": "IT Technician",
+          "company": "Company A"
+        },
+        {
+          "dateStart": "2022-01-01",
+          "dateEnd": "2022-12-31",
+          "jobTitle": "IT Technician",
+          "company": "Company A"
+        }
+      ]
+    }
+  ]
+}

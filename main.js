@@ -1,99 +1,19 @@
-const rooms = [
-  "conference",
-  "reception",
-  "server",
+let rooms = [];
+let employees = [];
+let roomWithEachEmployees = {};
+let data = [];
 
-  "security",
-  "staff",
-  "archives",
-];
+fetch("data.json")
+  .then((res) => res.json())
+  .then((fetchedData) => {
+    rooms = fetchedData.rooms;
+    employees = fetchedData.employees;
+    roomWithEachEmployees = fetchedData.roomWithEachEmployees;
+    data = fetchedData.data;
+    firstPrint();
+  })
+  .catch((err) => console.error(err));
 
-const employees = [
-  "receptionist",
-  "ittechnician",
-  "manager",
-  "security",
-  "nettoyage",
-  "other",
-];
-
-const roomWithEachEmployees = {
-  conference: ["nettoyage", "other", "manager"],
-  reception: ["receptionist", "nettoyage", "manager"], //
-  server: ["ittechnician", "nettoyage", "manager"], //
-  security: ["security", "nettoyage"], //
-  staff: ["staff", "nettoyage", "other", "manager"],
-  archives: ["other", "manager"],
-};
-
-let data = [
-  {
-    name: "Amine L.",
-    role: "security",
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
-    email: "amine.security@example.com",
-    phone: "0612345678",
-    workExperience: [
-      {
-        dateStart: "2022-01-01",
-        dateEnd: "2022-12-31",
-        jobTitle: "IT Technician",
-        company: "Company A",
-      },
-      {
-        dateStart: "2022-01-01",
-        dateEnd: "2022-12-31",
-        jobTitle: "IT Technician",
-        company: "Company A",
-      },
-    ],
-    room: null,
-  },
-  {
-    name: "Sara B.",
-    role: "receptionist",
-    photo: "https://randomuser.me/api/portraits/women/44.jpg",
-    email: "sara.reception@example.com",
-    phone: "0623456789",
-    workExperience: [
-      {
-        dateStart: "2022-01-01",
-        dateEnd: "2022-12-31",
-        jobTitle: "IT Technician",
-        company: "Company A",
-      },
-      {
-        dateStart: "2022-01-01",
-        dateEnd: "2022-12-31",
-        jobTitle: "IT Technician",
-        company: "Company A",
-      },
-    ],
-    room: "reception",
-  },
-  {
-    name: "Youssef K.",
-    role: "ittechnician",
-    photo: "https://randomuser.me/api/portraits/men/55.jpg",
-    email: "youssef.it@example.com",
-    phone: "0634567890",
-    room: "server",
-    workExperience: [
-      {
-        dateStart: "2022-01-01",
-        dateEnd: "2022-12-31",
-        jobTitle: "IT Technician",
-        company: "Company A",
-      },
-      {
-        dateStart: "2022-01-01",
-        dateEnd: "2022-12-31",
-        jobTitle: "IT Technician",
-        company: "Company A",
-      },
-    ],
-  },
-];
 let selectedRoom = null;
 
 const createEmployeeButton = document.getElementById("createEmployeeButton");
@@ -179,9 +99,23 @@ closeDetailsPopup.addEventListener("click", () => {
   detailsPopup.classList.add("hidden");
 });
 
-firstPrint();
-
 function firstPrint() {
+  const role = document.querySelector("#role");
+  const option = document.createElement("option");
+
+  option.value = "";
+  option.disabled = true;
+  option.selected = true;
+  option.textContent = "Select role";
+  role.append(option);
+
+  employees.forEach((e) => {
+    const option = document.createElement("option");
+    option.value = e;
+    option.textContent = e;
+    role.append(option);
+  });
+
   data.forEach((emp, index) => {
     if (emp.room === null) {
       addUnsignedEmployee(emp, index);
@@ -355,7 +289,11 @@ function showDetails(index) {
           id="employeePhoto"
           class="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-xl"
         >
-          ${emp.photo ? `<img src="${emp.photo}" class="w-full h-full object-cover rounded-full"/>` : "?"}
+          ${
+            emp.photo
+              ? `<img src="${emp.photo}" class="w-full h-full object-cover rounded-full"/>`
+              : "?"
+          }
         </div>
         <div>
           <h2 id="employeeName" class="text-xl font-bold">${emp.name}</h2>
@@ -370,22 +308,30 @@ function showDetails(index) {
       >
         <div class="flex justify-between">
           <span class="font-semibold">Phone:</span>
-          <span id="employeePhone" class="text-gray-700">${emp.phone || "---"}</span>
+          <span id="employeePhone" class="text-gray-700">${
+            emp.phone || "---"
+          }</span>
         </div>
 
         <div class="flex justify-between">
           <span class="font-semibold">Email:</span>
-          <span id="employeeEmail" class="text-gray-700">${emp.email || "---"}</span>
+          <span id="employeeEmail" class="text-gray-700">${
+            emp.email || "---"
+          }</span>
         </div>
 
         <div class="flex justify-between">
           <span class="font-semibold">Department:</span>
-          <span id="employeeDepartment" class="text-gray-700">${emp.room || "---"}</span>
+          <span id="employeeDepartment" class="text-gray-700">${
+            emp.room || "---"
+          }</span>
         </div>
 
         <div class="flex justify-between">
           <span class="font-semibold">Joined:</span>
-          <span id="employeeJoined" class="text-gray-700">${emp.joined || "---"}</span>
+          <span id="employeeJoined" class="text-gray-700">${
+            emp.joined || "---"
+          }</span>
         </div>
 
         <div class="flex flex-col">
@@ -402,7 +348,6 @@ function showDetails(index) {
     </div>
   `;
 }
-
 
 function canEnterRoom(role, room) {
   const restricted = {
@@ -471,7 +416,7 @@ form.addEventListener("submit", (e) => {
   }
 
   data.push(employee);
-  addUnsignedEmployee(employee, data.length);
+  addUnsignedEmployee(employee, data.length - 1);
 
   overlay.classList.add("hidden");
   form.reset();
