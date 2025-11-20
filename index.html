@@ -30,44 +30,50 @@
       <div
         class="work-spaces w-[80vw] aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
       >
-        <div data-room="conference" class="room conference flex flex-col w-[32vw">
+        <div
+          data-room="conference"
+          class="room conference flex flex-col w-[32vw] relative"
+        >
           <button
-            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer "
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer absolute top-3 left-4"
           >
             + conference
           </button>
         </div>
-        <div data-room="reception" class="room reception flex flex-col w-[17vw]">
+        <div
+          data-room="reception"
+          class="room reception flex flex-col w-[17vw] relative"
+        >
           <button
-            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer absolute top-3 left-4"
           >
             + reception
           </button>
         </div>
-        <div data-room="server" class="room server flex flex-col w-[17vw]">
+        <div data-room="server" class="room server flex flex-col w-[17vw] relative">
           <button
-            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer  absolute top-3 left-4"
           >
             + server
           </button>
         </div>
-        <div data-room="staff" class="room staff flex flex-col">
+        <div data-room="staff" class="room staff flex flex-col w-[17vw] relative">
           <button
-            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer w-[17vw]"
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer absolute top-3 left-4"
           >
             + staff
           </button>
         </div>
-        <div data-room="security" class="room security flex flex-col w-[32vw]">
+        <div data-room="security" class="room security flex flex-col w-[32vw] relative">
           <button
-            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer  absolute top-3 left-4"
           >
             + security
           </button>
         </div>
-        <div data-room="archives" class="room archives flex flex-col w-[17vw]">
+        <div data-room="archives" class="room archives flex flex-col w-[17vw] relative">
           <button
-            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer"
+            class="text-sm addToRoom p-1 bg-blue-700 text-white cursor-pointer  absolute top-3 left-4"
           >
             + Archives
           </button>
@@ -75,81 +81,85 @@
       </div>
     </main>
 
-<!-- Add Employee Modal -->
-<div
-  id="modalOverlay"
-  class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
->
-  <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-lg flex flex-col max-h-[80vh] overflow-hidden">
-    <h2 class="text-xl font-bold mb-4">Add Employee</h2>
-    <form id="employeeForm" class="flex flex-col gap-3 overflow-y-auto flex-1 pr-2">
-      <!-- Name -->
-      <input
-        type="text"
-        name="name"
-        placeholder="Name"
-        class="border p-2 rounded"
-      />
-
-      <!-- Role -->
-      <select id="role" name="role" class="border p-2 rounded">
-      </select>
-
-      <!-- Photo URL -->
-      <input
-        type="url"
-        name="photo"
-        placeholder="Photo URL"
-        class="border p-2 rounded"
-      />
-
-      <!-- Email -->
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        class="border p-2 rounded"
-      />
-
-      <!-- Phone -->
-      <input
-        type="tel"
-        name="phone"
-        placeholder="Phone"
-        class="border p-2 rounded"
-      />
-
-      <!-- Experiences container -->
-      <div id="experiences" class="flex flex-col gap-2"></div>
-
-      <!-- Add Experience Button -->
-      <button
-        id="addEperienceButton"
-        type="button"
-        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+    <!-- Add Employee Modal -->
+    <div
+      id="modalOverlay"
+      class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-white p-6 rounded-lg w-full max-w-md shadow-lg flex flex-col max-h-[80vh] overflow-hidden"
       >
-        Add Experience
-      </button>
+        <h2 class="text-xl font-bold mb-4">Add Employee</h2>
+        <form
+          id="employeeForm"
+          class="flex flex-col gap-3 overflow-y-auto flex-1 pr-2"
+        >
+          <!-- Name -->
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            class="border p-2 rounded"
+          />
 
-      <!-- Footer Buttons -->
-      <div class="flex justify-between mt-3">
-        <button
-          type="submit"
-          class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-        >
-          Save
-        </button>
-        <button
-          type="button"
-          id="closeModal"
-          class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-        >
-          Close
-        </button>
+          <!-- Role -->
+          <select id="role" name="role" class="border p-2 rounded"></select>
+
+          <!-- Photo URL -->
+          <input
+            type="url"
+            name="photo"
+            placeholder="Photo URL"
+            class="border p-2 rounded"
+          />
+
+          <!-- Email -->
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            class="border p-2 rounded"
+          />
+
+          <!-- Phone -->
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone"
+            class="border p-2 rounded"
+          />
+
+          <!-- Experiences container -->
+          <div id="experiences" class="flex flex-col gap-2"></div>
+
+          <!-- Add Experience Button -->
+          <button
+            id="addEperienceButton"
+            type="button"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          >
+            Add Experience
+          </button>
+
+          <!-- Footer Buttons -->
+          <div class="flex justify-between mt-3">
+            <button
+              type="submit"
+              class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              id="closeModal"
+              class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
-</div>
+    </div>
 
     <!-- Employee Detail Popup -->
     <div
@@ -199,8 +209,6 @@
         </button>
       </div>
     </div>
-
-    
 
     <script src="./main.js"></script>
   </body>

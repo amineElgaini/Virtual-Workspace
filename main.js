@@ -130,7 +130,7 @@ function addUnsignedEmployee(employee, index) {
   const card = document.createElement("div");
   card.dataset.index = index;
   card.className =
-    "unsignedEmployee flex w-fit cursor-pointer items-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-shadow duration-300 gap-2";
+    "unsignedEmployee flex flex-wrap cursor-pointer items-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-shadow duration-300 gap-2";
 
   card.innerHTML = `
     <img
@@ -165,14 +165,13 @@ function openChoosePopup(room) {
   if (eligible.length === 0) {
     chooseList.innerHTML = `<p class="text-gray-500 text-sm">No eligible employees.</p>`;
   } else {
-
     data.forEach((emp, index) => {
       if (canEnterRoom(emp.role, room) && emp.room === null) {
         const card = document.createElement("div");
         card.dataset.index = index;
 
         card.className =
-          "cardChoose flex cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
+          "cardChoose flex  cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
 
         card.innerHTML = `
         <img
@@ -187,11 +186,10 @@ function openChoosePopup(room) {
 
         chooseList.appendChild(card);
 
-        console.log(index)
+        console.log(index);
         document
           .querySelector(`.cardChoose[data-index="${index}"]`)
           .addEventListener("click", () => {
-            // console.log(emp, index, room);
             assignEmployeeToRoom(emp, index, room);
             choosePopup.classList.add("hidden");
           });
@@ -207,29 +205,45 @@ function canEnterRoom(role, room) {
 }
 
 function assignEmployeeToRoom(employee, employeeIndex, room) {
+  let count = 0;
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].room === room) {
+      count++;
+    }
+  }
+  if (count === 5) {
+    showToast("Max Is 5", "error");
+    return;
+  }
   const roomDiv = document.querySelector(`[data-room="${room}"]`);
   const div = document.createElement("div");
   div.dataset.index = employeeIndex;
 
   div.className =
-    "employee p-1 flex items-center bg-white rounded-lg shadow gap-1";
-  div.dataset.id = employeeIndex;
-
-  employee.room = room;
+    "employee cursor-pointer relative p-1 bg-white rounded-lg ";
 
   div.innerHTML = `
+  <button
+    data-index="${employeeIndex}"
+    class="removeEmployee  absolute z-20 -top-1 -right-1 p-1 bg-red-500 text-white rounded-full text-xs"
+  >
+    X
+  </button>
+
+  <div class="flex flex-col items-center">
       <img class="w-8 h-8 rounded-full" src="${employee.photo}" />
-      <div>
-        <h2 class="text-xs font-semibold">${employee.name}</h2>
-        <p class="text-xs text-gray-500">${employee.role}</p>
-      </div>
-      <button data-index="${employeeIndex}"
-        class="removeEmployee px-1 py-1 bg-red-500 text-white rounded text-xs ml-auto"
-      >
-        X
-      </button>
-  `;
+      <h2 class="text-xs font-semibold">${employee.name}</h2>
+  </div>
+`;
+
   roomDiv.append(div);
+
+  data = data.map((emp, index) => {
+        if (index === employeeIndex) {
+          emp.room = room;
+        }
+        return emp;
+      });
 
   document
     .querySelector(`.removeEmployee[data-index="${employeeIndex}"]`)
@@ -262,13 +276,10 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
 }
 
 function showDetails(index) {
-  // Find employee from data array
-  const emp = data[index]; // simpler than .find()
+  const emp = data[index];
 
-  // Show popup
   detailsPopup.classList.remove("hidden");
 
-  // Build experiences HTML dynamically
   let experiencesHTML = "";
   if (emp.workExperience && emp.workExperience.length > 0) {
     emp.workExperience.forEach((exp) => {
@@ -290,7 +301,6 @@ function showDetails(index) {
     experiencesHTML = `<p class="text-gray-500 text-sm">No work experience available.</p>`;
   }
 
-  // Populate popup content
   document.querySelector(".info").innerHTML = `
     <div class="info">
 
@@ -338,20 +348,6 @@ function showDetails(index) {
           }</span>
         </div>
 
-        <div class="flex justify-between">
-          <span class="font-semibold">Joined:</span>
-          <span id="employeeJoined" class="text-gray-700">${
-            emp.joined || "---"
-          }</span>
-        </div>
-
-        <div class="flex flex-col">
-          <span class="font-semibold">Notes:</span>
-          <p id="employeeNotes" class="text-gray-700 text-sm mt-1">
-            ${emp.notes || "No notes available."}
-          </p>
-        </div>
-
         <div id="experiences">
           ${experiencesHTML}
         </div>
@@ -359,26 +355,6 @@ function showDetails(index) {
     </div>
   `;
 }
-
-// function canEnterRoom(role, room) {
-//   const restricted = {
-//     receptionist: ["reception"],
-//     ittechnician: ["server"],
-//     security: ["security"],
-//     manager: [
-//       "conference",
-//       "reception",
-//       "server",
-//       "security",
-//       "staff",
-//       "archives",
-//     ],
-//     nettoyage: ["conference", "reception", "server", "security", "staff"],
-//     other: ["conference", "reception", "staff"],
-//   };
-
-//   return restricted[role]?.includes(room);
-// }
 
 addToRoomsButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -413,6 +389,28 @@ form.addEventListener("submit", (e) => {
     workExperience: epx,
     room: null,
   };
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  if (!emailRegex.test(employee.email)) {
+    showToast("Please enter a valid email address!", "error");
+    return;
+  }
+
+  const imageUrlRegex =
+    /^https?:\/\/[^\s]+\.(png|jpg|jpeg|gif|webp|svg)(\?.*)?$/;
+
+  if (!imageUrlRegex.test(employee.photo)) {
+    showToast("Please enter a valid image URL!", "error");
+    return;
+  }
+
+  const phoneRegex = /^[0-9+]{8,15}$/;
+
+  if (!phoneRegex.test(employee.phone)) {
+    showToast("Please enter a valid phone number!", "error");
+    return;
+  }
 
   if (employee.name.length < 3) {
     showToast("Name must be at least 3 characters long!", "error");
