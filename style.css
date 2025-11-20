@@ -18,7 +18,7 @@
   grid-template-rows: 1fr 1fr 1fr;
 }
 .work-spaces > div {
-  background-color: rgba(0, 0, 255, 0.152);
+  /* background-color: rgba(0, 0, 255, 0.152); */
   display: flex;
   justify-content: center;
   align-items: center;

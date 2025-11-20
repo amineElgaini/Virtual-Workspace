@@ -123,6 +123,8 @@ function firstPrint() {
       assignEmployeeToRoom(emp, index, emp.room);
     }
   });
+
+  colorRooms();
 }
 
 function addUnsignedEmployee(employee, index) {
@@ -171,7 +173,7 @@ function openChoosePopup(room) {
         card.dataset.index = index;
 
         card.className =
-          "cardChoose flex  cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
+          "cardChoose flex cursor-pointer items-center p-2 bg-white rounded-xl border shadow hover:shadow-lg transition-shadow duration-300 gap-2";
 
         card.innerHTML = `
         <img
@@ -192,6 +194,7 @@ function openChoosePopup(room) {
           .addEventListener("click", () => {
             assignEmployeeToRoom(emp, index, room);
             choosePopup.classList.add("hidden");
+            colorRooms();
           });
       }
     });
@@ -219,8 +222,7 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
   const div = document.createElement("div");
   div.dataset.index = employeeIndex;
 
-  div.className =
-    "employee cursor-pointer relative p-1 bg-white rounded-lg ";
+  div.className = "employee cursor-pointer relative p-1 bg-white rounded-lg ";
 
   div.innerHTML = `
   <button
@@ -239,11 +241,11 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
   roomDiv.append(div);
 
   data = data.map((emp, index) => {
-        if (index === employeeIndex) {
-          emp.room = room;
-        }
-        return emp;
-      });
+    if (index === employeeIndex) {
+      emp.room = room;
+    }
+    return emp;
+  });
 
   document
     .querySelector(`.removeEmployee[data-index="${employeeIndex}"]`)
@@ -260,6 +262,8 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
         .querySelector(`.employee[data-index="${employeeIndex}"]`)
         ?.remove();
       addUnsignedEmployee(employee, employeeIndex);
+            colorRooms();
+
     });
 
   // remove employee from unsigned list if it exists
@@ -429,6 +433,19 @@ form.addEventListener("submit", (e) => {
   form.reset();
   showToast("Employee added successfully!", "success");
 });
+
+function colorRooms() {
+  document.querySelectorAll(".room").forEach((room) => {
+    const isFound = data.some((emp) => emp.room === room.dataset.room);
+    if (isFound) {
+      room.classList.remove("bg-red-500/30");
+      room.classList.add("bg-blue-500/30");
+    } else {
+      room.classList.remove("bg-blue-500/30");
+      room.classList.add("bg-red-500/30");
+    }
+  });
+}
 
 closeBtn.addEventListener("click", () => {
   overlay.classList.add("hidden");
