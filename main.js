@@ -32,6 +32,9 @@ const detailsPopup = document.getElementById("detailsPopup");
 const experiences = document.getElementById("experiences");
 const addEperienceButton = document.getElementById("addEperienceButton");
 
+const photoInput = document.getElementById("photoInput");
+const photoPreview = document.getElementById("photoPreview");
+
 // Add experiences in pop up
 addEperienceButton.addEventListener("click", () => {
   const div = document.createElement("div");
@@ -262,8 +265,7 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
         .querySelector(`.employee[data-index="${employeeIndex}"]`)
         ?.remove();
       addUnsignedEmployee(employee, employeeIndex);
-            colorRooms();
-
+      colorRooms();
     });
 
   // remove employee from unsigned list if it exists
@@ -371,12 +373,31 @@ createEmployeeButton.addEventListener("click", () => {
   overlay.classList.remove("hidden");
 });
 
+photoInput.addEventListener("input", () => {
+  const url = photoInput.value.trim();
+
+  // if (!url) {
+  //   photoPreview.src = "./images/default.webp";
+  //   return;
+  // }
+  // const imageUrlRegex = /^https?:\/\//;
+  // if (imageUrlRegex.test(url)) {
+  photoPreview.src = url;
+  // } else {
+  //   photoPreview.src = "./images/default.webp";
+  // }
+
+  photoPreview.onerror = () => {
+    photoPreview.src = "./images/default.webp";
+  };
+});
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  let epx = [];
+  let exp = [];
   document.querySelectorAll(".experience-item").forEach((e) => {
-    epx.push({
+    exp.push({
       jobTitle: e.querySelector("input[name='jobTitle']").value,
       company: e.querySelector("input[name='company']").value,
       dateStart: e.querySelector("input[name='dateStart']").value,
@@ -384,28 +405,29 @@ form.addEventListener("submit", (e) => {
     });
   });
 
+  dateNotValid = exp.some((e) => new Date(e.dateStart) > new Date(e.dateEnd));
+
+  if (dateNotValid) {
+    showToast("This experience date!", "error");
+    return;
+  }
+
   const employee = {
     name: form.name.value,
     role: form.role.value,
-    photo: form.photo.value,
+    photo: form.photo.src,
     email: form.email.value,
     phone: form.phone.value,
-    workExperience: epx,
+    workExperience: exp,
     room: null,
   };
+
+  console.log(employee);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   if (!emailRegex.test(employee.email)) {
     showToast("Please enter a valid email address!", "error");
-    return;
-  }
-
-  const imageUrlRegex =
-    /^https?:\/\/[^\s]+\.(png|jpg|jpeg|gif|webp|svg)(\?.*)?$/;
-
-  if (!imageUrlRegex.test(employee.photo)) {
-    showToast("Please enter a valid image URL!", "error");
     return;
   }
 
@@ -436,8 +458,10 @@ form.addEventListener("submit", (e) => {
 
 function colorRooms() {
   document.querySelectorAll(".room").forEach((room) => {
-    const isFound = data.some((emp) => emp.room === room.dataset.room);
-    if (isFound) {
+    currentRoom = room.dataset.room;
+    const isFound = data.some((emp) => emp.room === currentRoom);
+
+    if (isFound || currentRoom == "conference" || currentRoom == "staff") {
       room.classList.remove("bg-red-500/30");
       room.classList.add("bg-blue-500/30");
     } else {
