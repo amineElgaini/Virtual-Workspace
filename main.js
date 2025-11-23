@@ -160,18 +160,13 @@ function addUnsignedEmployee(employee, index) {
 function openChoosePopup(room) {
   chooseList.innerHTML = "";
 
-  const eligible = data.filter((emp) => {
-    if (emp.room === null) {
-      return canEnterRoom(emp.role, room);
-    }
-    return false;
-  });
+  const eligible = data.find((emp) => canEnterRoom(emp.role, room));
 
-  if (eligible.length === 0) {
+  if (!eligible) {
     chooseList.innerHTML = `<p class="text-gray-500 text-sm">No eligible employees.</p>`;
   } else {
     data.forEach((emp, index) => {
-      if (canEnterRoom(emp.role, room) && emp.room === null) {
+      if (canEnterRoom(emp.role, room) /*&& emp.room === null*/) {
         const card = document.createElement("div");
         card.dataset.index = index;
 
@@ -191,10 +186,10 @@ function openChoosePopup(room) {
 
         chooseList.appendChild(card);
 
-        console.log(index);
         document
           .querySelector(`.cardChoose[data-index="${index}"]`)
           .addEventListener("click", () => {
+            document.querySelector(`.room [data-index="${index}"]`)?.remove();
             assignEmployeeToRoom(emp, index, room);
             choosePopup.classList.add("hidden");
             colorRooms();
@@ -221,7 +216,7 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
     showToast("Max Is 5", "error");
     return;
   }
-  const roomDiv = document.querySelector(`[data-room="${room}"]`);
+  const roomDiv = document.getElementById(room);
   const div = document.createElement("div");
   div.dataset.index = employeeIndex;
 
@@ -280,7 +275,6 @@ function assignEmployeeToRoom(employee, employeeIndex, room) {
       showDetails(employeeIndex);
     });
 }
-
 function showDetails(index) {
   const emp = data[index];
 
@@ -364,7 +358,7 @@ function showDetails(index) {
 
 addToRoomsButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
-    selectedRoom = btn.parentElement.dataset.room;
+    selectedRoom = btn.closest(".room").dataset.room;
     openChoosePopup(selectedRoom);
   });
 });
@@ -376,16 +370,7 @@ createEmployeeButton.addEventListener("click", () => {
 photoInput.addEventListener("input", () => {
   const url = photoInput.value.trim();
 
-  // if (!url) {
-  //   photoPreview.src = "./images/default.webp";
-  //   return;
-  // }
-  // const imageUrlRegex = /^https?:\/\//;
-  // if (imageUrlRegex.test(url)) {
   photoPreview.src = url;
-  // } else {
-  //   photoPreview.src = "./images/default.webp";
-  // }
 
   photoPreview.onerror = () => {
     photoPreview.src = "./images/default.webp";

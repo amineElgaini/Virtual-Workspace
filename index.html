@@ -14,8 +14,99 @@
       class="fixed top-4 right-4 flex flex-col gap-2 z-50"
     ></div>
 
-    <main class="flex flex-row items-start">
-      <!-- unsigned employees -->
+
+  <main class="flex flex-col-reverse md:flex-row">
+        <aside class="bg-amber-400 p-2 employees w-full md:w-[20vw]">
+        <button
+          id="createEmployeeButton"
+          class="bg-blue-600 p-1 text-white rounded"
+        >
+          Add Employee
+        </button>
+        <div id="unsignedEmployees" class="flex items-center justify-center gap-4 mt-2"></div>
+      </aside>
+
+    <section id="rooms" class=" relative w-full">
+      <img src="./workSpaces.jpg" alt="plan d'etrage" class="w-full max-h-screen h-[500px] lg:h-screen md:h-screen block">
+      <div class="container-card-unsigned absolute top-0 left-0 w-full h-full md:h-screen  grid grid-cols-[38%_17%_22%_22%]  grid-rows-[33.5%_32%_32.5%] ">
+
+        <article data-room="conference" class="room col-start-1 row-start-1 justify-center rounded border border-transparent bg-blue-500/20">
+          <div class="flex flex-col justify-center mt-2 w-full">
+            <button id="btn-zone-conference" type="button" class="addToRoom lg:px-3 lg:py-1.5 lg:flex md:rounded lg:rounded rounded-full bg-amber-500 text-slate-950 text-xs w-auto">
+              + <span class="w-10 hidden lg:block">Ajouter</span>
+            </button>
+            <h2 class="text-xs font-semibold text-center">Salle de conférence</h2>
+          </div>
+          <div id="conference"
+            class="grid lg:grid-cols-3 md:grid-cols-3 gap-2  grid-cols-3 justify-around mt-2 ml-1 text-xs text-slate-300 zone">
+          </div>
+        </article>
+
+        <article data-room="reception" class="room col-start-1 row-start-2 row-span-2 justify-center rounded border border-transparent bg-blue-500/20">
+          <div class="flex flex-col justify-center mt-2 w-full">
+            <button id="btn-zone-reception" type="button" class="addToRoom lg:px-3 lg:py-1.5 lg:flex md:rounded lg:rounded rounded-full bg-amber-500 text-slate-950 text-xs w-auto">
+              + <span class="w-10 hidden lg:block">Ajouter</span>
+            </button>
+            <h2 class="text-xs font-semibold text-center">Salon du réception</h2>
+          </div>
+          <div id="reception"
+            class="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-3 justify-between mt-3 text-xs text-slate-300 zone">
+          </div>
+        </article>
+
+        <article data-room="staff" class="room col-start-3 row-start-3 justify-center rounded border border-transparent bg-blue-500/20">
+          <div class="flex flex-col justify-center mt-2 w-full">
+            <button id="btn-zone-staff-room" type="button" class="addToRoom lg:px-3 lg:py-1.5 lg:flex md:rounded lg:rounded rounded-full bg-amber-500 text-slate-950 text-xs w-auto">
+              + <span class="w-10 hidden lg:block">Ajouter</span>
+            </button>
+            <h2 class="text-xs font-semibold text-center">Salle du personnel</h2>
+          </div>
+          <div id="staff"
+            class="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-2 justify-between mt-3 text-xs text-slate-300 zone">
+          </div>
+        </article>
+
+        <article data-room="server" class="room col-start-3 row-start-1 justify-center rounded border border-transparent bg-blue-500/20">
+          <div class="flex flex-col justify-center mt-2 w-full">
+            <button id="btn-zone-server" type="button" class="addToRoom lg:px-3 lg:py-1.5 lg:flex md:rounded lg:rounded rounded-full bg-amber-500 text-slate-950 text-xs w-auto">
+              + <span class="w-10 hidden lg:block">Ajouter</span>
+            </button>
+            <h2 class="text-xs font-semibold text-center">Salle des server</h2>
+          </div>
+          <div id="server"
+            class="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-2 justify-center mt-3 text-xs text-slate-300 zone">
+          </div>
+        </article>
+
+        <article data-room="security" class="room col-start-4 row-start-1 justify-center rounded border border-transparent bg-blue-500/20">
+          <div class="flex flex-col justify-center mt-2 w-full">
+            <button id="btn-zone-security" type="button"
+              class="addToRoom lg:px-3 lg:py-1.5 lg:flex md:rounded lg:rounded rounded-full bg-amber-500 text-slate-950 text-xs w-auto">
+              + <span class="w-10 hidden lg:block">Ajouter</span>
+            </button>
+            <h2 class="text-xs font-semibold text-center">Salle de sécurité</h2>
+          </div>
+          <div id="security"
+            class="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-2 justify-between mt-3 text-xs text-slate-300 zone">
+          </div>
+        </article>
+
+        <article data-room="archives" class="room col-start-4 row-start-3 justify-center rounded border border-transparent bg-blue-500/20">
+          <div class="flex flex-col justify-center mt-2 w-full">
+            <button id="btn-zone-archives" type="button" class="addToRoom lg:px-3 lg:py-1.5 lg:flex md:rounded lg:rounded rounded-full bg-amber-500 text-slate-950 text-xs w-auto">
+              + <span class="w-10 hidden lg:block">Ajouter</span>
+            </button>
+            <h2 class="text-xs font-semibold text-center">Salle des archives</h2>
+          </div>
+          <div id="archives"
+            class="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-2 gap-1 justify-between mt-3 text-xs text-slate-300 zone">
+          </div>
+        </article>
+      </div>
+    </section>
+    </main>
+
+    <!-- <main class="flex flex-row items-start">
       <div class="p-2 employees w-[20vw]">
         <button
           id="createEmployeeButton"
@@ -26,7 +117,6 @@
         <div id="unsignedEmployees" class="mt-2"></div>
       </div>
 
-      <!-- workspaces -->
       <div
         class="work-spaces w-[90vw] aspect-[5/3] bg-[url('./workSpaces.jpg')] bg-no-repeat bg-cover"
       >
@@ -79,11 +169,10 @@
           </button>
         </div>
       </div>
-    </main>
+    </main> -->
 
     <!-- Add Employee Modal -->
-    <div
-      id="modalOverlay"
+    <div id="modalOverlay"
       class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
     >
       <div
@@ -170,8 +259,7 @@
     </div>
 
     <!-- Employee Detail Popup -->
-    <div
-      id="detailsPopup"
+    <div id="detailsPopup"
       class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50"
     >
       <div
@@ -195,8 +283,7 @@
     </div>
 
     <!-- choose employee popup -->
-    <div
-      id="chooseEmployeePopup"
+    <div id="chooseEmployeePopup"
       class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50"
     >
       <div
